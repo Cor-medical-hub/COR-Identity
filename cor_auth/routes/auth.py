@@ -93,12 +93,12 @@ async def login(
         )
     if user.email in settings.eternal_accounts:
         access_token = await auth_service.create_access_token(
-            data={"oid": user.id}, expires_delta=1000000
+            data={"oid": user.id}, expires_delta=settings.eternal_token_expiration
         )
-        refresh_token = await auth_service.create_refresh_token(data={"oid": user.id}, expires_delta=10000000)
+        refresh_token = await auth_service.create_refresh_token(data={"oid": user.id}, expires_delta=settings.eternal_token_expiration)
     else:
         access_token = await auth_service.create_access_token(
-            data={"oid": user.id}, expires_delta=1
+            data={"oid": user.id}
         )
         refresh_token = await auth_service.create_refresh_token(data={"oid": user.id})
     await repository_users.update_token(user, refresh_token, db)
@@ -136,8 +136,8 @@ async def refresh_token(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token"
         )
     if user.email in settings.eternal_accounts:
-        access_token = await auth_service.create_access_token(data={"oid": user.id}, expires_delta=1000000)
-        refresh_token = await auth_service.create_refresh_token(data={"oid": user.id}, expires_delta=10000000)
+        access_token = await auth_service.create_access_token(data={"oid": user.id}, expires_delta=settings.eternal_token_expiration)
+        refresh_token = await auth_service.create_refresh_token(data={"oid": user.id}, expires_delta=settings.eternal_token_expiration)
     else:
         access_token = await auth_service.create_access_token(data={"oid": user.id})
         refresh_token = await auth_service.create_refresh_token(data={"oid": user.id})
