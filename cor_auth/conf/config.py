@@ -32,6 +32,9 @@ class Settings(BaseSettings):
     authorization_via_google: bool = "True"
     authorization_via_facebook: bool = "True"
     eternal_accounts: list = json.loads(os.getenv("ETERNAL_ACCOUNTS", "[]"))
+    access_token_expiration: int = 1 
+    refresh_token_expiration: int = 1
+    eternal_token_expiration: int = 1
 
     class Config:
 
