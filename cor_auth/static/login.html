@@ -156,10 +156,16 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         defaultLang = 'en';
     }
+    localStorage.setItem('selectedLanguage', defaultLang); // Сохраняем выбранный язык в localStorage
 
+    const TestLanguage = localStorage.getItem('selectedLanguage');
+
+    // Выводим сохранённый язык в консоль
+    console.log('Сохранённый язык:', TestLanguage);
     setLanguage(defaultLang);
      // Установка значения селектора языка на загруженный язык
      const langSelect = document.getElementById('lang-select');
+
     langSelect.value = defaultLang;
 
         // Инициализация Select2 для выпадающего списка языка
@@ -345,9 +351,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function getErrorMessage(status, messageDiv) {
+        const userLang = localStorage.getItem('selectedLanguage');
         switch(status) {
-            case 401:
-                const userLang = localStorage.getItem('selectedLanguage');
+            case 401:  
                 messageDiv.innerText = translations[userLang]["message-error"];
                 messageDiv.style.color = 'red';
                 return "Invalid username or password.";
@@ -357,6 +363,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 return "User not registered!";
             case 403:
                 return "Access denied.";
+            case 404:
+                messageDiv.innerText = translations[userLang]["message-error"];
+                messageDiv.style.color = 'red';
+                return "Invalid username or password.";
             default:
                 console.error("Error during login.");
                 messageDiv.innerText = translations[userLang]["message-error"];
